@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}NeuroScan AI{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="page-shell">
+        <aside class="sidebar">
+            <div>
+                <div class="brand-badge">AI-Powered Clinical Imaging Demo</div>
+                <div class="brand-title">NeuroScan AI</div>
+                <div class="brand-subtitle">Brain MRI multi-class classification interface</div>
+            </div>
+
+            <div class="sidebar-card">
+                <h3>Model Info</h3>
+                <ul class="sidebar-list">
+                    <li><span>File</span><strong>{{ model_path }}</strong></li>
+                    <li><span>Input</span><strong>{{ image_size }} × {{ image_size }}</strong></li>
+                    <li><span>Classes</span><strong>{{ class_names|length }}</strong></li>
+                    <li><span>Formats</span><strong>JPG / JPEG / PNG</strong></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-card sidebar-note">
+                <h3>Disclaimer</h3>
+                <p>
+                    This application is intended for research, educational, and demonstration use only.
+                    It does not replace clinical expertise or medical diagnosis.
+                </p>
+            </div>
+        </aside>
+
+        <main class="content">
+            <section class="hero">
+                <div class="hero-tag">Deep Learning Interface</div>
+                <h1>Brain Tumor MRI Classification</h1>
+                <p>
+                    Upload a brain MRI image and run fast inference using an EfficientNet-based deep learning model.
+                    The workflow is optimized for a clean, modern, and professional demonstration experience.
+                </p>
+            </section>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-stack">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

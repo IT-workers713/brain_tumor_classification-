@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}NeuroScan AI | Upload MRI{% endblock %}
+
+{% block content %}
+    {% if model_error %}
+        <div class="flash flash-danger">Model loading error: {{ model_error }}</div>
+    {% endif %}
+
+    <div class="grid-two">
+        <section class="card glass-card">
+            <div class="card-head">
+                <div>
+                    <h2>MRI Image Input</h2>
+                    <p>Upload one MRI image to launch the prediction workflow.</p>
+                </div>
+                <span class="chip">Secure Upload</span>
+            </div>
+
+            <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" class="upload-form">
+                <label class="upload-dropzone" for="mri_image">
+                    <input id="mri_image" name="mri_image" type="file" accept=".jpg,.jpeg,.png" required>
+                    <div class="upload-icon">🧠</div>
+                    <div class="upload-title">Drop your MRI image here or click to browse</div>
+                    <div class="upload-subtitle">Supported formats: JPG, JPEG, PNG · Max size: 10 MB</div>
+                </label>
+
+                <button class="btn-primary" type="submit">Run AI Analysis</button>
+            </form>
+        </section>
+
+        <section class="card glass-card">
+            <div class="card-head">
+                <div>
+                    <h2>Supported Classes</h2>
+                    <p>The model predicts one of the following categories.</p>
+                </div>
+                <span class="chip">4 Classes</span>
+            </div>
+
+            <div class="chip-grid">
+                {% for class_name in class_names %}
+                    <span class="class-chip">{{ class_name }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="workflow-box">
+                <h3>Workflow</h3>
+                <ul>
+                    <li>Upload a brain MRI image.</li>
+                    <li>The server preprocesses it to match the training pipeline.</li>
+                    <li>The EfficientNet model predicts one of the available classes.</li>
+                    <li>Confidence ranking and processed preview are displayed on the results page.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+{% endblock %}

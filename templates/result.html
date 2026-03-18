@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}NeuroScan AI | Prediction Result{% endblock %}
+
+{% block content %}
+    <div class="prediction-banner" style="--accent: {{ prediction.color }};">
+        <div class="prediction-badge">{{ prediction.badge }}</div>
+        <h2>{{ prediction.label }}</h2>
+        <p>{{ prediction.description }}</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span>Predicted Class</span>
+                <strong>{{ prediction.label }}</strong>
+            </div>
+            <div class="stat-card">
+                <span>Confidence</span>
+                <strong>{{ prediction.confidence }}%</strong>
+            </div>
+            <div class="stat-card">
+                <span>Model Input</span>
+                <strong>{{ image_size }} × {{ image_size }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-two result-grid">
+        <section class="card glass-card">
+            <div class="card-head">
+                <div>
+                    <h2>Probability Distribution</h2>
+                    <p>Confidence scores across all available classes.</p>
+                </div>
+                <span class="chip">Ranked Output</span>
+            </div>
+
+            <div class="probability-list">
+                {% for item in ranked_predictions %}
+                    <div class="probability-item">
+                        <div class="probability-meta">
+                            <span>{{ loop.index }}. {{ item.label }}</span>
+                            <strong>{{ item.percentage }}%</strong>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-bar" style="width: {{ item.percentage }}%; background: {{ item.color }};"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="card glass-card">
+            <div class="card-head">
+                <div>
+                    <h2>Image Summary</h2>
+                    <p>Original image details and preprocessing overview.</p>
+                </div>
+                <span class="chip">Preview</span>
+            </div>
+
+            <div class="meta-grid">
+                <div class="stat-card">
+                    <span>Original Width</span>
+                    <strong>{{ image_meta.width }}</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Original Height</span>
+                    <strong>{{ image_meta.height }}</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Color Mode</span>
+                    <strong>{{ image_meta.mode }}</strong>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="grid-two result-grid">
+        <section class="card glass-card">
+            <div class="card-head">
+                <div>
+                    <h2>Original MRI Image</h2>
+                    <p>The uploaded source image used for analysis.</p>
+                </div>
+            </div>
+            <img class="result-image" src="{{ original_image_uri }}" alt="Original MRI image">
+        </section>
+
+        <section class="card glass-card">
+            <div class="card-head">
+                <div>
+                    <h2>Preprocessed Model Input</h2>
+                    <p>Resized preview that matches the model pipeline.</p>
+                </div>
+            </div>
+            <img class="result-image" src="{{ preprocessed_image_uri }}" alt="Preprocessed MRI image">
+        </section>
+    </div>
+
+    <div class="action-row">
+        <a href="{{ url_for('index') }}" class="btn-secondary">Analyze Another Image</a>
+    </div>
+{% endblock %}
